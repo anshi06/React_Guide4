@@ -10,6 +10,36 @@ const Login = (props) => {
   const [enteredPassword, setEnteredPassword] = useState("");
   const [passwordIsValid, setPasswordIsValid] = useState();
   const [formIsValid, setFormIsValid] = useState(false);
+  //Step 1:
+  // useEffect(()=>{
+  //   console.log('Effect Running');
+  // })
+
+  // //Step 2:
+  // useEffect(()=>{
+  //   console.log('Effect Running');
+  // }, [])
+
+
+  //Step 3:
+  // useEffect(()=>{
+  //   console.log('Effect Running');
+  // }, [enteredPassword])
+
+  //Step 4:
+  // useEffect(()=>{
+  //   console.log('Effect Running');
+  //   return ()=>{console.log('Effect Clean UP')}
+  // }, [enteredPassword])
+
+
+  //Step 5:
+  // useEffect(()=>{
+  //   console.log('Effect Running');
+  //   return ()=>{console.log('Effect Clean UP')}
+  // }, [])
+
+
   useEffect(() => {
     console.log("checking validity");
     const identifier = setTimeout(() => {
@@ -29,7 +59,7 @@ const Login = (props) => {
   //debouncing:- we will not do our work work for every key stroke ..because in complex situation such as in sending http request
   //it can create network traffic and it is also possible that it sends too many unneccesary requests so debouncing is done .
   //we wait for some time when user's typing is complete and then we send request . this will work fine .
-  // FOR EVERY KEYSTROKE WEE ARE SETTING A TIMER
+  // FOR EVERY KEYSTROKE WE ARE SETTING A TIMER
 
   const emailChangeHandler = (event) => {
     setEnteredEmail(event.target.value);
