@@ -11,10 +11,25 @@ const Login = (props) => {
   const [passwordIsValid, setPasswordIsValid] = useState();
   const [formIsValid, setFormIsValid] = useState(false);
   useEffect(() => {
-    setFormIsValid(
-      enteredEmail.includes("@") && enteredPassword.trim().length > 6
-    );
+    console.log("checking validity");
+    const identifier = setTimeout(() => {
+      setFormIsValid(
+        enteredEmail.includes("@") && enteredPassword.trim().length > 6
+      );
+    }, 500);
+    return () => {
+      console.log("CLEAN UP");
+      clearTimeout(identifier);
+    };
+    // this is a clean up function we can return in use effect function , this will perform a clean up process before
+    // this function executes for next time. It does not run before the very first side effect function run. it runs before every new
+    //side effect function executes.
   }, [enteredEmail, enteredPassword]);
+
+  //debouncing:- we will not do our work work for every key stroke ..because in complex situation such as in sending http request
+  //it can create network traffic and it is also possible that it sends too many unneccesary requests so debouncing is done .
+  //we wait for some time when user's typing is complete and then we send request . this will work fine .
+  // FOR EVERY KEYSTROKE WEE ARE SETTING A TIMER
 
   const emailChangeHandler = (event) => {
     setEnteredEmail(event.target.value);
