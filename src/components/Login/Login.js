@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer, useContext } from "react";
+import React, { useState, useEffect, useReducer, useContext, useRef } from "react";
 import AuthContext from "../../store/auth-context";
 import Card from "../UI/Card/Card";
 import classes from "./Login.module.css";
@@ -62,7 +62,8 @@ const Login = (props) => {
   //it can create network traffic and it is also possible that it sends too many unneccesary requests so debouncing is done .
   //we wait for some time when user's typing is complete and then we send request . this will work fine .
   // FOR EVERY KEYSTROKE WE ARE SETTING A TIMER
-
+ const emailInputRef = useRef();
+ const passwordInputRef = useRef();
   const emailChangeHandler = (event) => {
     // setEnteredEmail(event.target.value);
     dispatchEmail({ type: "USER_INPUT", val: event.target.value });
@@ -87,13 +88,25 @@ const Login = (props) => {
   const authCtx = useContext(AuthContext);
   const submitHandler = (event) => {
     event.preventDefault();
-    authCtx.onLogin(emailState.value, passwordState.value);
+    if(formIsValid){
+      authCtx.onLogin(emailState.value, passwordState.value);
+    }
+    else if(!emailIsValid){
+      emailInputRef.current.focus();
+
+    }
+    else{
+      passwordInputRef.current.focus();
+
+    }
+    
   };
 
   return (
     <Card className={classes.login}>
       <form onSubmit={submitHandler}>
         <Input
+        ref={emailInputRef}
           id="email"
           label="E-Mail"
           type="email"
@@ -104,6 +117,7 @@ const Login = (props) => {
         />
 
         <Input
+        ref={passwordInputRef}
           id="password"
           label="Password"
           type="password"
@@ -113,7 +127,7 @@ const Login = (props) => {
           onBlur={validatePasswordHandler}
         />
         <div className={classes.actions}>
-          <Button type="submit" className={classes.btn} disabled={!formIsValid}>
+          <Button type="submit" className={classes.btn}>
             Login
           </Button>
         </div>
