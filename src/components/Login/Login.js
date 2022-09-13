@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 
 import Card from "../UI/Card/Card";
 import classes from "./Login.module.css";
@@ -39,48 +39,25 @@ const Login = (props) => {
     value: "",
     isValid: null,
   });
-  //Step 1:
-  // useEffect(()=>{
-  //   console.log('Effect Running');
-  // })
 
-  // //Step 2:
-  // useEffect(()=>{
-  //   console.log('Effect Running');
-  // }, [])
+  const {isValid : emailIsValid} = emailState;
+  const {isValid : passwordIsValid} = passwordState;
 
-  //Step 3:
-  // useEffect(()=>{
-  //   console.log('Effect Running');
-  // }, [enteredPassword])
-
-  //Step 4:
-  // useEffect(()=>{
-  //   console.log('Effect Running');
-  //   return ()=>{console.log('Effect Clean UP')}
-  // }, [enteredPassword])
-
-  //Step 5:
-  // useEffect(()=>{
-  //   console.log('Effect Running');
-  //   return ()=>{console.log('Effect Clean UP')}
-  // }, [])
-
-  // useEffect(() => {
-  //   console.log("checking validity");
-  //   const identifier = setTimeout(() => {
-  //     setFormIsValid(
-  //       enteredEmail.includes("@") && enteredPassword.trim().length > 6
-  //     );
-  //   }, 500);
-  //   return () => {
-  //     console.log("CLEAN UP");
-  //     clearTimeout(identifier);
-  //   };
-  //   // this is a clean up function we can return in use effect function , this will perform a clean up process before
-  //   // this function executes for next time. It does not run before the very first side effect function run. it runs before every new
-  //   //side effect function executes.
-  // }, [enteredEmail, enteredPassword]);
+  useEffect(() => {
+    console.log("checking validity");
+    const identifier = setTimeout(() => {
+      setFormIsValid(
+        emailIsValid && passwordIsValid
+      );
+    }, 500);
+    return () => {
+      console.log("CLEAN UP");
+      clearTimeout(identifier);
+    };
+    // this is a clean up function we can return in use effect function , this will perform a clean up process before
+    // this function executes for next time. It does not run before the very first side effect function run. it runs before every new
+    //side effect function executes.
+  }, [emailIsValid, passwordIsValid]);
 
   //debouncing:- we will not do our work work for every key stroke ..because in complex situation such as in sending http request
   //it can create network traffic and it is also possible that it sends too many unneccesary requests so debouncing is done .
@@ -90,15 +67,13 @@ const Login = (props) => {
   const emailChangeHandler = (event) => {
     // setEnteredEmail(event.target.value);
     dispatchEmail({ type: "USER_INPUT", val: event.target.value });
-    setFormIsValid(
-      event.target.value.includes("@") && passwordState.isValid
-    );
+    // setFormIsValid(event.target.value.includes("@") && passwordState.isValid);
   };
 
   const passwordChangeHandler = (event) => {
    // setEnteredPassword(event.target.value);
    dispatchPassword({type: "USER_INPUT", val: event.target.value})
-    setFormIsValid(emailState.isValid && event.target.value.trim().length > 6);
+    // setFormIsValid(emailState.isValid && event.target.value.trim().length > 6);
   };
 
   const validateEmailHandler = () => {
